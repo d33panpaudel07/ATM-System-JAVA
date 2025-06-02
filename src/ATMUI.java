@@ -4,35 +4,50 @@ import java.awt.event.*;
 
 public class ATMUI extends JFrame {
     private ATMService atmService = new ATMService();
+    private CustomerService customerService = new CustomerService();
 
     private JTextField accNumberField = new JTextField(15);
     private JTextField amountField = new JTextField(15);
     private JTextField toAccField = new JTextField(15);
-    private JTextArea outputArea = new JTextArea(8, 30);
+
+    private JTextField nameField = new JTextField(15);
+    private JTextField mobileField = new JTextField(15);
+
+    private JTextArea outputArea = new JTextArea(10, 40);
 
     public ATMUI() {
         setTitle("ATM Machine");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JPanel inputPanel = new JPanel(new GridLayout(4, 2, 5, 5));
+        JPanel inputPanel = new JPanel(new GridLayout(6, 2, 5, 5));
         inputPanel.add(new JLabel("Account Number:"));
         inputPanel.add(accNumberField);
         inputPanel.add(new JLabel("Amount:"));
         inputPanel.add(amountField);
         inputPanel.add(new JLabel("To Account (for Transfer):"));
         inputPanel.add(toAccField);
+        inputPanel.add(new JLabel("Name (for Create):"));
+        inputPanel.add(nameField);
+        inputPanel.add(new JLabel("Mobile (for Create):"));
+        inputPanel.add(mobileField);
 
         JPanel buttonPanel = new JPanel();
         JButton depositBtn = new JButton("Deposit");
         JButton withdrawBtn = new JButton("Withdraw");
         JButton checkBtn = new JButton("Check Balance");
         JButton transferBtn = new JButton("Transfer");
+        JButton createBtn = new JButton("Create Account");
+        JButton getCustomerBtn = new JButton("View Customer");
+        JButton deleteBtn = new JButton("Delete Account");
 
         buttonPanel.add(depositBtn);
         buttonPanel.add(withdrawBtn);
         buttonPanel.add(checkBtn);
         buttonPanel.add(transferBtn);
+        buttonPanel.add(createBtn);
+        buttonPanel.add(getCustomerBtn);
+        buttonPanel.add(deleteBtn);
 
         outputArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(outputArea);
@@ -75,6 +90,36 @@ public class ATMUI extends JFrame {
                 outputArea.append("Transfer successful.\n");
             } else {
                 outputArea.append("Transfer failed.\n");
+            }
+        });
+
+        createBtn.addActionListener(e -> {
+            String name = nameField.getText();
+            String acc = accNumberField.getText();
+            String mobile = mobileField.getText();
+            if (customerService.createCustomer(name, acc, mobile)) {
+                outputArea.append("Account created successfully.\n");
+            } else {
+                outputArea.append("Account creation failed.\n");
+            }
+        });
+
+        getCustomerBtn.addActionListener(e -> {
+            String acc = accNumberField.getText();
+            Customer customer = customerService.getCustomerByAccountNumber(acc);
+            if (customer != null) {
+                outputArea.append("Customer Details:\n" + customer + "\n");
+            } else {
+                outputArea.append("Customer not found.\n");
+            }
+        });
+
+        deleteBtn.addActionListener(e -> {
+            String acc = accNumberField.getText();
+            if (customerService.deleteCustomerByAccountNumber(acc)) {
+                outputArea.append("Account deleted successfully.\n");
+            } else {
+                outputArea.append("Account deletion failed.\n");
             }
         });
 
