@@ -3,6 +3,8 @@
 A simple Java-based ATM simulation using JDBC and MySQL. This project demonstrates basic banking operations (deposit, withdraw, transfer, balance check, and customer management) with a Swing-based user interface.
 SWING MAY NOT WORK PROPERLY!! BUT THE FUNCTIONS DO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+I suggest using the Text based ui in APP.java
+
 ## Features
 
 -   Deposit, withdraw, and transfer money between accounts
